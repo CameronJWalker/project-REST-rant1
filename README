@@ -1,4 +1,5 @@
-GET / Home page
+| GET | / | Home page |
+| :---:|:-:| :--------|
 GET /places Places index page
 POST /places Create new place
 GET /places/new Form page for creating a new place
@@ -10,4 +11,4 @@ POST /place/:id/rant/:rant Create a rant (comment) about a particular place
 DELETE /places/:id/rant/:rantId Delete a rant (comment) about a particular place
 GET * 404 page (matches any route not defined above)
 
-
+Your places should have a name (string), city (string), state (string), cuisines (string) and a pic (string)
