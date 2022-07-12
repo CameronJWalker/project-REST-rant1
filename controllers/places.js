@@ -1,5 +1,7 @@
 const app = require('express').Router()
-
+app.get('/new', (req, res) => {
+  res.render('places/new')
+})
 app.get('/', (req, res) => {
     let places = [{
         name: 'H-Thai-ML',
@@ -14,18 +16,12 @@ app.get('/', (req, res) => {
         cuisines: 'Coffee, Bakery',
         pic: '/images/thecrepery.jpg'
       }]
-      
       res.render('places/index', { places })
-      router.post('/', (req, res) => {
-        console.log(req.body)
-        res.send('POST /places')
-      })
-      
     })
-    app.get('/new', (req, res) => {
-      res.render('places/new')
+    app.post('/', (req, res) => {
+      console.log(req.body)
+      res.send('POST /places')
     })
-    
     
 
 module.exports = app
