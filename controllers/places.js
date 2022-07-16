@@ -1,10 +1,11 @@
-const app = require('express').Router()
-const places = require('../models/places.js')
+const express = require('express');
+const router = require('express').Router();
+const places = require('../models/places.js');
 
-app.get('/new', (req, res) => {
+router.get('/new', (req, res) => {
   res.render('places/new')
 })
-app.get('/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   let id = Number(req.params.id)
   if (isNaN(id)) {
     res.render('error404')
@@ -16,26 +17,68 @@ app.get('/:id', (req, res) => {
     res.render('places/show', { place: places[id] })
   }
 })
-app.delete('/places/:id', (req, res) => {
+//edit route
+router.get('/:id/edit', (req, res) => {
   let id = Number(req.params.id)
   if (isNaN(id)) {
-    res.render('error404')
+      res.render('error404')
   }
   else if (!places[id]) {
-    res.render('error404')
+      res.render('error404')
   }
   else {
-    places.splice(id, 1)
-    res.redirect('/places')
+      let data = {
+          place: places[id],
+          id: id
+      }
+      res.render('places/edit', data)
   }
 })
+// put route //update
+router.put('/:id', (req, res) => {
+  let id = Number(req.params.id)
+  if (isNaN(id)) {
+      res.render('error404')
+  }
+  else if (!places[id]) {
+      res.render('error404')
+  }
+  else {
+      // Dig into req.body and make sure data is valid
+      if (!req.body.pic) {
+          // Default image if one is not provided
+          req.body.pic = 'http://placekitten.com/400/400'
+      }
+      if (!req.body.city) {
+          req.body.city = 'Anytown'
+      }
+      if (!req.body.state) {
+          req.body.state = 'USA'
+      }
 
+      // Save the new data into places[id]
+      places[id] = req.body
+      res.redirect('/places/${req.params.id')
+    }  
+  })
+  router.delete('/:id', (req, res) => {
+    let id = Number(req.params.id)
+    if (isNaN(id)) {
+        res.render('error404')
+    }
+    else if (!places[id]) {
+        res.render('error404')
+    }
+    else {
+        places.splice(id, 1)
+        res.redirect('/places')
+    }
+    }) 
 
-
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
       res.render('places/index', { places })
     })
-    app.post('/', (req, res) => {
+    router.post('/', (req, res) => {
       console.log(req.body)
       if (!req.body.pic) {
         // Default image if one is not provided
@@ -52,4 +95,4 @@ app.get('/', (req, res) => {
     })
     
 
-module.exports = app
+module.exports = router
